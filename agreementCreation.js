@@ -1,16 +1,20 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import previewInvoices from '@salesforce/apex/RentalInvoiceController.previewInvoices';
 
+
 export default class AgreementCreation extends LightningElement {
 
+    data = [];
+
+
+    @track
     agreement = {
-        Name:'test',
-        Account__c:'0015j000017DwdmAAC',
+        Name: '',
         Product__c:'01t5j00000CGE93AAH',
         Start_date__c:'',
         End_date__c:'',
-        Amount__c:1110,
+        Amount__c:100,
         Variable_Type__c:'Fixed',
         Payment_type__c:'Monthly',
         Due_Date__c:2
@@ -43,8 +47,17 @@ export default class AgreementCreation extends LightningElement {
 
         this.dispatchEvent(agreementCreatedEvent);    }
 
-    handleName(event){
-        this.agreement.Name=event.target.value;    }
+        handleName(event){
+        this.agreement.Name=event.target.value;    
+        }
+
+        handleAccount(event){
+            this.agreement.Account__c=event.target.value;
+        }
+
+        handleProduct(event){
+            this.agreement.Product__c=event.target.value;
+        }
 
         handleStartDate(event){
             this.agreement.Start_date__c=event.target.value;
@@ -54,7 +67,25 @@ export default class AgreementCreation extends LightningElement {
             this.agreement.End_date__c=event.target.value;
         }
 
+        handleAmount(event){
+            this.agreement.Amount__c=event.target.value;
+        }
+
+        handleVariableType(event){
+            this.agreement.Variable_Type__c=event.target.value;
+        }
+
+        handlePaymentType(event){
+            this.agreement.Payment_type__c=event.target.value;
+        }
+
+        handleDueDate(event){
+            this.agreement.Due_Date__c=event.target.value;
+        }
+
     handlePreview(event) {
+
+        let invoiceList = [];
 
         previewInvoices({
             agreements : [this.agreement]
@@ -62,11 +93,16 @@ export default class AgreementCreation extends LightningElement {
             .then((data) => {
                 console.log('data==> ', JSON.stringify(data));
                if(data.length > 0){
-                //this.data = data.map(item => ({...item, URL: '/' + item.Id}));
                
+
+                this.data = data;
               console.log('Data  =>>' + JSON.stringify(this.data));
   
                }
+
+               
+
+
             });
         
     }
